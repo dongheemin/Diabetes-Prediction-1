@@ -21,17 +21,26 @@ dataset = datas.to_numpy()
 train, test = train_test_split(dataset, test_size=0.2)
 train, val = train_test_split(train, test_size=0.4)
 
-train_X = train[:,0:11]
-train_Y = train[:,11]
-test_X = test[:,0:11]
-test_Y = test[:,11]
-val_X = val[:,0:11]
-val_Y = val[:,11]
+train_X = np.array([train[:,0:11]], dtype=np.float32)
+train_Y = np.array(train[:,11], dtype=np.float32)
+test_X = np.array([test[:,0:11]], dtype=np.float32)
+test_Y = np.array(test[:,11], dtype=np.float32)
+val_X = np.array([val[:,0:11]], dtype=np.float32)
+val_Y = np.array(val[:,11], dtype=np.float32)
 
+# Check Variable
+print(np.shape(train_X))
+print(np.shape(test_X))
+print(np.shape(val_X))
+
+print(train_Y)
+print(np.shape(train_Y))
+print(np.shape(test_Y))
+print(np.shape(val_Y))
 model = tf.keras.Sequential([
     tf.keras.layers.SimpleRNN(units=30,
-                              activation='tanh'
-                              ),
+                              activation='tanh',
+                              input_shape=[3590,11]),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 model.summary()
