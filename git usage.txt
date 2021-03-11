@@ -1,0 +1,17 @@
+git bash 사용법
+커맨드 : 윈도우 cmd와 동일 dir, ls, cd
+
+git 등록
+1. git init 
+2. git remote add origin https://github.com/dongheemin/data_science.git
+3. git pull origin master
+
+git push 사용법
+1. git add *
+2. git commit -m "커밋 코멘트 내용"
+3. git push origin master
+
+git push 에러 발생시
+git pull origin master 하고 사용할 것
+
+★절대 강제푸시 금지★
