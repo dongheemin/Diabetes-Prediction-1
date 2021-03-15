@@ -4,34 +4,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-#Load Data
-datas = pd.read_csv('./diabetes2.csv')
-
-#Training
+def z_score_normalize(lst):
+    normalized = []
+    for value in lst:
+        normalized_num = (value - np.mean(lst)) / np.std(lst)
+        normalized.append(normalized_num)
+    return np.array(normalized)
 
 np.random.seed(20210302)
+
+#Load Data
+datas = pd.read_csv('../dataset/diabetes2.csv')
 dataset = datas.to_numpy()
 
-# Normalization
-
-
 # DataSet Split
-train, test = train_test_split(dataset, test_size=0.2)
-train, val = train_test_split(train, test_size=0.4)
+train, test = train_test_split(dataset,test_size=0.3)
 
-train_X = train[:, 0:11]
+# Normalization
+train_X = z_score_normalize(train[:, 0:11])
 train_Y = train[:, 11]
-test_X = test[:, 0:11]
+test_X = z_score_normalize(test[:, 0:11])
 test_Y = test[:, 11]
-val_X = val[:, 0:11]
-val_Y = val[:, 11]
 
 #Model Making
 model = tf.keras.Sequential([
     tf.keras.layers.Dense(128, activation='relu', input_dim=11),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(1024, activation='relu'),
+    tf.keras.layers.Dense(1024, activation='relu'),
+    tf.keras.layers.GaussianDropout(0.25),
+    tf.keras.layers.Dense(512, activation='relu'),
+    tf.keras.layers.GaussianDropout(0.25),
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.GaussianDropout(0.25),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 
@@ -39,20 +43,21 @@ model.summary()
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=['accuracy'])
 
 #Model Training with Validation
-history = model.fit(train_X,train_Y, epochs=800, batch_size=100, verbose=0, validation_data=(val_X,val_Y))
+history = model.fit(train_X,train_Y, epochs=10, batch_size=1000, verbose=0, validation_split=0.2)
 
 #Model Test
 scores = model.evaluate(test_X,test_Y)
 print("\nANN %s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
-#Make Picture
-fig, (ax0, ax1) = plt.subplots(nrows=1,ncols=2, sharey=False, figsize=(10, 5))
-
-ax0.plot(history.history['accuracy'])
-ax0.set(title='model accuracy', xlabel='epoch', ylabel='accuracy')
-ax1.plot(history.history['loss'])
-ax1.set(title='model loss', xlabel='epoch', ylabel='loss')
-
+#Make PLT
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model acc')
+plt.ylabel('acc')
+plt.xlabel('epoch')
+plt.legend(['train', 'val', 'loss', 'val_loss'], loc='upper left')
 plt.show()
 
 #Custom Data Testing
@@ -81,4 +86,3 @@ for i in range(0, len(test_Y)):
             str_1 = str_1 + ", " + str(j)
 
         print("input : ",str_1,"output : ",predict_class_1[i][0],", but real is",test_Y[i])
-
