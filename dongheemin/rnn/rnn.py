@@ -1,10 +1,10 @@
 import tensorflow as tf
 import pandas as pd
-import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
+#Normalization Function
 def z_score_normalize(lst):
     normalized = []
     for value in lst:
@@ -12,20 +12,13 @@ def z_score_normalize(lst):
         normalized.append(normalized_num)
     return np.array(normalized)
 
-# 최대 줄 수 설정
-pd.set_option('display.max_rows', 500)
-# 최대 열 수 설정
-pd.set_option('display.max_columns', 500)
-# 표시할 가로의 길이
-pd.set_option('display.width', 1000)
-
-datas = pd.read_csv('../dataset/diabetes2.csv')
-
-
 np.random.seed(20210302)
+
+# Data Load
+datas = pd.read_csv('../dataset/diabetes2.csv')
 dataset = datas.to_numpy()
-# print(dataset.shape)
-# print(dataset)
+
+# Data Preprocessing
 rnn_dataset = np.empty((0,12,1), dtype=np.float32)
 
 for i in dataset:
@@ -37,6 +30,7 @@ for i in dataset:
     rnn_dataset = np.append(rnn_dataset, [lsts], axis=0)
 print(rnn_dataset.shape)
 
+# Data Split
 train, test = train_test_split(rnn_dataset, test_size=0.3)
 
 train_X = np.array(train[:,0:11], dtype=np.float32)
@@ -44,6 +38,7 @@ train_Y = np.array(train[:,11:12], dtype=np.float32)
 test_X = np.array(test[:,0:11], dtype=np.float32)
 test_Y = np.array(test[:,11:12], dtype=np.float32)
 
+# Model Learning & Testing
 model = tf.keras.Sequential([
     tf.keras.layers.SimpleRNN(units=100,
                               activation='tanh', input_shape=[11, 1]),
@@ -58,6 +53,7 @@ scores = model.evaluate(test_X,test_Y)
 
 print("\nRNN %s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
+# Show Figure
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.plot(history.history['loss'])
@@ -84,13 +80,3 @@ ounique, ocounts = np.unique((test_Y), return_counts=True)
 
 print(dict(zip(ounique, ocounts)))
 print(dict(zip(unique, counts)))
-
-# print(datas.head(5))
-# print('data shape: ', datas.shape)
-# print('-----------[info]-----------')
-# print(datas.info())
-#
-# # datas.hist(figsize=(15,15))
-# # sns.clustermap(data=datas.corr(), annot = True, cmap = 'RdYlBu_r', vmin = -1, vmax = 1)
-# #sns.heatmap(data=datas.corr(), annot=True, fmt='.2f', linewidths=.5, cmap="Blues")
-
