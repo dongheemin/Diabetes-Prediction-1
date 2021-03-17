@@ -14,7 +14,7 @@ def z_score_normalize(lst):
 np.random.seed(20210302)
 
 #Load Data
-datas = pd.read_csv('../dataset/diabetes2.csv')
+datas = pd.read_csv('../0. dataset/diabetes2.csv')
 dataset = datas.to_numpy()
 
 # DataSet Split
@@ -79,10 +79,10 @@ ounique, ocounts = np.unique((test_Y), return_counts=True)
 print(dict(zip(ounique, ocounts)))
 print(dict(zip(unique, counts)))
 
-for i in range(0, len(test_Y)):
-    str_1 = "";
-    if(test_Y[i] != predict_class_1[i]):
-        for j in test_X[i]:
-            str_1 = str_1 + ", " + str(j)
-
-        print("input : ",str_1,"output : ",predict_class_1[i][0],", but real is",test_Y[i])
+# for i in range(0, len(test_Y)):
+#     str_1 = "";
+#     if(test_Y[i] != predict_class_1[i]):
+#         for j in test_X[i]:
+#             str_1 = str_1 + ", " + str(j)
+#
+#         print("input : ",str_1,"output : ",predict_class_1[i][0],", but real is",test_Y[i])

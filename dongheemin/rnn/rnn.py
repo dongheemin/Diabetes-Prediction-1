@@ -15,7 +15,7 @@ def z_score_normalize(lst):
 np.random.seed(20210302)
 
 # Data Load
-datas = pd.read_csv('../dataset/diabetes2.csv')
+datas = pd.read_csv('../0. dataset/diabetes2.csv')
 dataset = datas.to_numpy()
 
 # Data Preprocessing
@@ -46,24 +46,11 @@ model = tf.keras.Sequential([
 ])
 model.summary()
 model.compile(loss="mse", optimizer="adam", metrics=['accuracy'])
-
 history = model.fit(train_X,train_Y, epochs=800, batch_size=100, verbose=0, validation_split=0.2)
-
 scores = model.evaluate(test_X,test_Y)
-
 print("\nRNN %s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
-# Show Figure
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model acc')
-plt.ylabel('acc')
-plt.xlabel('epoch')
-plt.legend(['train', 'val', 'loss', 'val_loss'], loc='upper left')
-
-plt.show()
+# Model Test
 #                       ht      wt   wc    bmi bo1_1 bo2_1 bd1_11 bd2 bs1_1 bs2_1 bs3_1
 patient_1 = np.array([[[156]  , [68.1], [81.2], [27.98],    [2],    [4],    [0],  [0],   [0],    [0],    [0]]]) # dg = 1 (코호트)
 patient_2 = np.array([[[157.1], [64.2], [86.8], [26.01],    [1],    [1], 	[0],  [0],	 [3],	 [0],    [0]]]) # dg = 1 (국민건강)
@@ -80,3 +67,15 @@ ounique, ocounts = np.unique((test_Y), return_counts=True)
 
 print(dict(zip(ounique, ocounts)))
 print(dict(zip(unique, counts)))
+
+# Show Figure
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model acc')
+plt.ylabel('acc')
+plt.xlabel('epoch')
+plt.legend(['train', 'val', 'loss', 'val_loss'], loc='upper left')
+
+plt.show()

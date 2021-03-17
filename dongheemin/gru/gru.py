@@ -15,7 +15,7 @@ def z_score_normalize(lst):
 np.random.seed(20210302)
 
 # Data Load
-datas = pd.read_csv('../dataset/diabetes2.csv')
+datas = pd.read_csv('../0. dataset/diabetes2.csv')
 dataset = datas.to_numpy()
 
 # Data Preprocessing
