@@ -5,5 +5,5 @@
 주요 연구
 
 1. Diabetes Prediction Model
-- 민동희 : MLP(87%), RNN(87%)
+- 민동희 : MLP(87%), RNN(87%), GRU(88%)
 - 홍경찬 : RP 외
