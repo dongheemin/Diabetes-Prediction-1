@@ -9,7 +9,7 @@ def processSubset(data, outcome, strr):
     model = smf.ols(formula = outcome+" ~ "+strr, data = data)
     regr = model.fit()
     AIC = regr.aic
-    return {"model" : regr, "AIC" : AIC}
+    return {"model" : regr, "AIC" : AIC, "Feature" : strr}
 
 #The function of get Best AIC Model by all of combinations
 def getBest(data, outcome, k):
@@ -42,16 +42,18 @@ data = pd.read_csv('../0. dataset/diabetes3.csv')
 Target = "DE1_dg"
 
 #Make DataFrame for save result
-models = pd.DataFrame(columns=["AIC", "model"])
+models = pd.DataFrame(columns=["AIC", "model", "Feature"])
 
 #Set StartTime
 tic = time.time()
 
-for i in range(1, len(data.columns.difference([Target]))):
+for i in range(1, len(data.columns.difference([Target]))+1):
     models.loc[i] = getBest(data, outcome=Target, k=i)
 toc = time.time()
 print("Total elapsed time:", (toc-tic),"Seconds")
 
 for i in range(1, len(data.columns.difference([Target]))+1):
-    print(models.loc[i, "model"].summary())
+    print(models.loc[i, "AIC"])
     print(models.loc[i, "Feature"].split("+"))
+
+print(models.shape)
