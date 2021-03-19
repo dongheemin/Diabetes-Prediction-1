@@ -55,5 +55,3 @@ print("Total elapsed time:", (toc-tic),"Seconds")
 for i in range(1, len(data.columns.difference([Target]))+1):
     print(models.loc[i, "AIC"])
     print(models.loc[i, "Feature"].split("+"))
-
-print(models.shape)
