@@ -1,8 +1,5 @@
-# data_science
+# Diabetes Prediction_1
 
-본 레포는 민동희의 데이터 과학 연구를 보관하는 저장소입니다.
-
-주요 연구
 <HR />
 
 1. Diabetes Prediction Model
